@@ -1,55 +1,22 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+  import { i18n } from '$lib/i18n/index.svelte';
+
   const REPO = 'https://github.com/Lavescar-dev/lavescar-ytdl';
-  const RELEASES = `${REPO}/releases/latest`;
+  const RELEASES = `${REPO}/releases`;
 
-  const features = [
-    {
-      icon: '⌘',
-      title: 'Keyboard-first',
-      body: 'Paste URL with ⌘L, switch presets with ⌘1-3 inside the active tab, jump between Video/Audio with ⌘⇧V/⌘⇧A. Hit ? anywhere for the cheatsheet.'
-    },
-    {
-      icon: '◈',
-      title: 'Preset library',
-      body: 'Video and Audio tabs with 5 opinionated presets each — from archival av1+opus to mp3 v0 or flac lossless. Edit, delete, add your own.'
-    },
-    {
-      icon: '▣',
-      title: 'Playlist-aware',
-      body: 'Paste a playlist URL and a modal opens with every entry. Select all, a range (1-10, 15, 20-25), or individual videos and queue them in one click.'
-    },
-    {
-      icon: '≡',
-      title: 'Real concurrency',
-      body: 'A live-adjustable semaphore gates downloads. Queue ten URLs at limit=2 and the manager fires them off in order as slots free up.'
-    },
-    {
-      icon: '↺',
-      title: 'Self-updating',
-      body: 'yt-dlp breaks every few weeks — one click in Settings pulls the latest binary with SHA-256 verification. The app itself auto-updates through a minisign-signed manifest.'
-    },
-    {
-      icon: '⌦',
-      title: 'Clean cancel',
-      body: 'Cancelled rows move to History as `cancelled` instead of vanishing. Leftover .part fragments surface on next launch with a one-click "delete all" banner.'
-    },
-    {
-      icon: '✦',
-      title: 'Error that helps',
-      body: 'Geo-block, age-gate, and network failures get kind-specific toasts — with a deep-link to the Cookies view when authentication is the issue.'
-    },
-    {
-      icon: '♪',
-      title: 'Subtitles & SponsorBlock',
-      body: 'Per-download subtitle picker (manual / auto, embed / sidecar VTT). Preset flags carry SponsorBlock, chapter splits, metadata embedding through to yt-dlp verbatim.'
-    }
-  ];
+  onMount(() => i18n.init());
 
-  const platforms = [
-    { id: 'linux',   label: 'Linux',    ext: 'AppImage / .deb',   note: 'chmod +x, then run' },
-    { id: 'windows', label: 'Windows',  ext: '.msi / .exe',       note: 'SmartScreen → More info → Run anyway' },
-    { id: 'macos',   label: 'macOS',    ext: '.dmg',              note: 'xattr -rd com.apple.quarantine /Applications/lavescar-ytdl.app' }
-  ];
+  // Reactive shorthand into the active dictionary.
+  const t = $derived(i18n.t);
+  const locale = $derived(i18n.locale);
+
+  // Pre-rendered svg glyphs for OS platforms (no third-party icon font).
+  const PLATFORM_ICONS = {
+    linux: `<path d="M12 2c-1.6 0-2.7 1.4-2.7 3.2 0 .6.1 1.1.3 1.6-.6.4-1.2 1-1.6 1.7-.5.8-.8 1.6-.8 2.6 0 .9.2 1.6.4 2.3.2.6.4 1.1.4 1.7 0 .5-.2 1-.4 1.4-.3.5-.6 1-.6 1.7 0 .9.5 1.6 1.2 1.9.5.2 1 .3 1.5.4-.2.4-.3.8-.3 1.3 0 1 .8 1.7 1.7 1.7.5 0 .9-.2 1.3-.5.3-.2.6-.4.9-.4.3 0 .5.2.8.4.4.3.8.5 1.3.5.9 0 1.7-.7 1.7-1.7 0-.5-.1-.9-.3-1.3.5-.1 1-.2 1.5-.4.7-.3 1.2-1 1.2-1.9 0-.7-.3-1.2-.6-1.7-.2-.4-.4-.9-.4-1.4 0-.6.2-1.1.4-1.7.2-.7.4-1.4.4-2.3 0-1-.3-1.8-.8-2.6-.4-.7-1-1.3-1.6-1.7.2-.5.3-1 .3-1.6 0-1.8-1.1-3.2-2.7-3.2zm-1.4 4.5c.4 0 .7.4.7 1s-.3 1-.7 1-.7-.4-.7-1 .3-1 .7-1zm2.8 0c.4 0 .7.4.7 1s-.3 1-.7 1-.7-.4-.7-1 .3-1 .7-1zM12 8c.6 0 1.1.2 1.3.4.2.2.3.4.3.6 0 .3-.2.5-.5.7l-1.1.7-1.1-.7c-.3-.2-.5-.4-.5-.7 0-.2.1-.4.3-.6.2-.2.7-.4 1.3-.4z" fill="currentColor"/>`,
+    windows: `<path d="M3 5.4 10.4 4.3v7.4H3zM10.4 12.5v7.2L3 18.6v-6.1zM11.3 4.2 21 2.7v9.0h-9.7zM21 12.5v9L11.3 20v-7.5z" fill="currentColor"/>`,
+    macos: `<path d="M16.4 13c0-2.4 1.9-3.5 2-3.6-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.9-.8-3.1-.8-1.6 0-3.1.9-3.9 2.4-1.7 2.9-.4 7.2 1.2 9.5.8 1.2 1.7 2.5 3 2.4 1.2-.1 1.6-.8 3.1-.8 1.4 0 1.9.8 3.1.7 1.3 0 2.1-1.2 2.9-2.4.9-1.4 1.3-2.7 1.3-2.8 0 0-2.5-1-2.5-3.7zm-2.3-6.7c.6-.8 1.1-1.9 1-3-.9 0-2.1.6-2.7 1.4-.6.7-1.1 1.8-1 2.9 1 .1 2-.5 2.7-1.3z" fill="currentColor"/>`
+  } as const;
 </script>
 
 <main class="page">
@@ -62,9 +29,23 @@
       <span class="mode">yt-dlp</span>
       <span class="ver">v1.0.0</span>
     </div>
-    <nav class="top-nav">
-      <a href={REPO} target="_blank" rel="noopener">github</a>
-      <a href="https://lavescar.com.tr" target="_blank" rel="noopener">lavescar.com.tr</a>
+    <nav class="top-nav" aria-label={t.langSwitch.aria}>
+      <a href={REPO} target="_blank" rel="noopener">{t.nav.github}</a>
+      <a href="https://lavescar.com.tr" target="_blank" rel="noopener">{t.nav.site}</a>
+      <div class="lang" role="group" aria-label={t.langSwitch.aria}>
+        <button
+          class="lang-btn"
+          class:on={locale === 'en'}
+          aria-pressed={locale === 'en'}
+          onclick={() => i18n.set('en')}
+        >{t.langSwitch.en}</button>
+        <button
+          class="lang-btn"
+          class:on={locale === 'tr'}
+          aria-pressed={locale === 'tr'}
+          onclick={() => i18n.set('tr')}
+        >{t.langSwitch.tr}</button>
+      </div>
     </nav>
   </header>
 
@@ -72,64 +53,77 @@
   <section class="hero">
     <div class="hero-main">
       <h1>
-        <span class="h-muted">the</span> quiet, fast,<br />
-        <span class="h-accent">keyboard-first</span> desktop<br />
-        frontend for yt-dlp.
+        <span class="h-muted">{t.hero.title.lead}</span><br />
+        {#each t.hero.title.mid.split('\n') as line, i}
+          {#if i === 0}<span class="h-accent">{line}</span>{:else}<br />{line}{/if}
+        {/each}<br />
+        {#each t.hero.title.tail.split('\n') as line, i}
+          {#if i > 0}<br />{/if}{line}
+        {/each}
       </h1>
-      <p class="hero-sub">
-        Tauri 2 + SvelteKit. An opinionated wrapper that keeps the terminal
-        feel, surfaces yt-dlp's real power, and turns downloading into a
-        <em>three-keystroke</em> ritual.
-      </p>
+      <p class="hero-sub">{t.hero.sub}</p>
+
       <div class="hero-cta">
-        <a class="btn primary" href={RELEASES} target="_blank" rel="noopener">
-          <span>▸ download v1.0.0</span>
+        <a class="btn primary" href="#install">
+          <span>{t.hero.download}</span>
         </a>
+        <div class="plat-icons" role="group" aria-label="Choose platform">
+          <a class="plat-ico" href="#install-linux"   aria-label="Linux">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">{@html PLATFORM_ICONS.linux}</svg>
+          </a>
+          <a class="plat-ico" href="#install-windows" aria-label="Windows">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">{@html PLATFORM_ICONS.windows}</svg>
+          </a>
+          <a class="plat-ico" href="#install-macos"   aria-label="macOS">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">{@html PLATFORM_ICONS.macos}</svg>
+          </a>
+        </div>
         <a class="btn ghost" href={REPO} target="_blank" rel="noopener">
-          <span>view on github</span>
+          <span>{t.hero.githubBtn}</span>
         </a>
       </div>
+
       <div class="hero-meta">
-        <span>AGPL-3.0</span>
+        <span>{t.hero.metaLicense}</span>
         <span class="dot-sep">·</span>
-        <span>Linux · Windows · macOS</span>
+        <span>{t.hero.metaPlatforms}</span>
         <span class="dot-sep">·</span>
-        <span>unsigned but reproducible</span>
+        <span>{t.hero.metaSigning}</span>
       </div>
     </div>
 
-    <!-- ASCII-mockup card: no screenshot dependency -->
+    <!-- ASCII-mockup card -->
     <div class="hero-card" aria-hidden="true">
       <div class="mock-row head">
-        <span>source url</span>
-        <span class="clip">● clipboard listener active</span>
+        <span>{t.mock.sourceUrl}</span>
+        <span class="clip">{t.mock.clip}</span>
       </div>
       <div class="mock-input">
         <span class="prompt">$</span>
         <span class="url">https://www.youtube.com/watch?v=…</span>
-        <span class="enter">fetch ↵</span>
-        <span class="queue">▸ queue</span>
+        <span class="enter">{t.mock.fetch}</span>
+        <span class="queue">{t.mock.queue}</span>
       </div>
-      <div class="mock-row head">METADATA <span class="ready">ready · 23:14</span></div>
+      <div class="mock-row head">{t.mock.metadata} <span class="ready">{t.mock.ready}</span></div>
       <div class="mock-meta">
-        <div><span>BEST-V</span><span class="hi">av01.0.08M.08 · 1080p60 · 4.2 Mbps</span></div>
-        <div><span>BEST-A</span><span class="hi">opus · 160 kbps · 48 kHz</span></div>
-        <div><span>SIZE-EST</span><span>≈ 116 MB</span></div>
-        <div><span>CHAPTERS</span><span>7 chapters detected</span></div>
+        <div><span>{t.mock.bestV}</span><span class="hi">av01.0.08M.08 · 1080p60 · 4.2 Mbps</span></div>
+        <div><span>{t.mock.bestA}</span><span class="hi">opus · 160 kbps · 48 kHz</span></div>
+        <div><span>{t.mock.sizeEst}</span><span>≈ 116 MB</span></div>
+        <div><span>{t.mock.chapters}</span><span>{t.mock.chaptersDetected}</span></div>
       </div>
       <div class="mock-chips">
-        <span class="chip on">av1+opus</span>
-        <span class="chip">vp9+opus</span>
-        <span class="chip">h264+aac</span>
-        <span class="chip">audio · m4a</span>
+        <span class="chip on">{t.mock.chips.av1}</span>
+        <span class="chip">{t.mock.chips.vp9}</span>
+        <span class="chip">{t.mock.chips.h264}</span>
+        <span class="chip">{t.mock.chips.m4a}</span>
       </div>
-      <div class="mock-row head">ACTIVE <span>1 running · concurrent: 3</span></div>
+      <div class="mock-row head">{t.mock.activeHead} <span>{t.mock.activeMeta}</span></div>
       <div class="mock-dl">
         <span class="num">01</span>
         <div class="dl-main">
-          <div class="dl-title">Wube · How Factorio's Belt Compression…</div>
+          <div class="dl-title">{t.mock.dlTitle}</div>
           <div class="dl-bar"><div class="dl-fill" style="width: 68%"></div></div>
-          <div class="dl-stats"><span>78.9 MB / 116 MB</span><span>4.2 MB/s</span><span class="hi">68%</span><span>eta 0:08</span></div>
+          <div class="dl-stats"><span>78.9 MB / 116 MB</span><span>4.2 MB/s</span><span class="hi">68%</span><span>{t.mock.eta}</span></div>
         </div>
       </div>
     </div>
@@ -139,12 +133,13 @@
   <section class="features">
     <div class="sec-head">
       <span class="sec-dot"></span>
-      <h2>what makes it different</h2>
+      <h2>{t.features.head}</h2>
     </div>
     <div class="feat-grid">
-      {#each features as f}
+      {#each t.features.items as f, i}
+        {@const icons = ['⌘', '◈', '▣', '≡', '↺', '⌦', '✦', '♪']}
         <div class="feat">
-          <span class="feat-ico" aria-hidden="true">{f.icon}</span>
+          <span class="feat-ico" aria-hidden="true">{icons[i] ?? '·'}</span>
           <h3>{f.title}</h3>
           <p>{f.body}</p>
         </div>
@@ -153,33 +148,35 @@
   </section>
 
   <!-- Install -->
-  <section class="install">
+  <section class="install" id="install">
     <div class="sec-head">
       <span class="sec-dot"></span>
-      <h2>install</h2>
+      <h2>{t.install.head}</h2>
     </div>
     <p class="install-note">
-      v1.0 ships <strong>unsigned</strong> — no paid Apple / Windows
-      certificates. Each bundle's SHA-256 is published on the release page so
-      you can verify before running. Auto-update is signed separately with a
-      local minisign keypair.
+      {t.install.note.lead}<strong>{t.install.note.emphasis}</strong>{t.install.note.tail}
     </p>
 
     <div class="plat-grid">
-      {#each platforms as p}
-        <a class="plat" href={RELEASES} target="_blank" rel="noopener">
+      {#each t.install.platforms as p, i}
+        {@const ids = ['install-linux', 'install-windows', 'install-macos']}
+        {@const iconKey = ['linux', 'windows', 'macos'][i] as 'linux'|'windows'|'macos'}
+        <a class="plat" id={ids[i]} href={RELEASES} target="_blank" rel="noopener">
           <div class="plat-head">
-            <span class="plat-label">{p.label}</span>
+            <span class="plat-label">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="plat-svg">{@html PLATFORM_ICONS[iconKey]}</svg>
+              {p.label}
+            </span>
             <span class="plat-ext">{p.ext}</span>
           </div>
           <div class="plat-note">{p.note}</div>
-          <div class="plat-cta">download ↗</div>
+          <div class="plat-cta">{p.cta}</div>
         </a>
       {/each}
     </div>
 
     <details class="details">
-      <summary>verify the SHA-256</summary>
+      <summary>{t.install.verifyTitle}</summary>
       <div class="code-block">
 <pre>
 # Linux
@@ -195,7 +192,7 @@ certutil -hashfile lavescar-ytdl_*.msi SHA256
     </details>
 
     <details class="details">
-      <summary>build from source</summary>
+      <summary>{t.install.sourceTitle}</summary>
       <div class="code-block">
 <pre>
 git clone https://github.com/Lavescar-dev/lavescar-ytdl.git
@@ -213,18 +210,11 @@ npm run tauri:dev
 
   <!-- Philosophy -->
   <section class="philosophy">
-    <blockquote>
-      <p>
-        yt-dlp is the engine. Most "frontends" ship a Chrome window wrapped
-        around <code>child_process.spawn</code>. This isn't that — it owns the
-        tooling layer so you don't solve already-solved problems every release.
-      </p>
-    </blockquote>
+    <blockquote><p>{t.philosophy.quote}</p></blockquote>
     <ul class="anti-list">
-      <li><span>▸</span> no telemetry, no phoning home</li>
-      <li><span>▸</span> no dark patterns (ads, upsells, account required)</li>
-      <li><span>▸</span> no Electron bundle (Tauri → native webview)</li>
-      <li><span>▸</span> no opinionated file layout hijack — yt-dlp's <code>-o</code> template stays yours</li>
+      {#each t.philosophy.list as line}
+        <li><span>▸</span> {line}</li>
+      {/each}
     </ul>
   </section>
 
@@ -232,12 +222,12 @@ npm run tauri:dev
   <footer class="foot">
     <div class="foot-left">
       <span>lavescar ▸ yt-dlp</span>
-      <span class="dim">· v1.0.0 · AGPL-3.0</span>
+      <span class="dim">{t.footer.crumbs}</span>
     </div>
     <div class="foot-right">
-      <a href={REPO} target="_blank" rel="noopener">github</a>
-      <a href={`${REPO}/issues`} target="_blank" rel="noopener">issues</a>
-      <a href="https://lavescar.com.tr" target="_blank" rel="noopener">lavescar.com.tr</a>
+      <a href={REPO} target="_blank" rel="noopener">{t.footer.github}</a>
+      <a href={`${REPO}/issues`} target="_blank" rel="noopener">{t.footer.issues}</a>
+      <a href="https://lavescar.com.tr" target="_blank" rel="noopener">{t.footer.site}</a>
     </div>
   </footer>
 </main>
@@ -252,6 +242,7 @@ npm run tauri:dev
     flex-direction: column;
     gap: 56px;
   }
+  :global(html) { scroll-behavior: smooth; }
 
   /* ---------- top bar ---------- */
   .top {
@@ -260,6 +251,8 @@ npm run tauri:dev
     justify-content: space-between;
     padding-bottom: 16px;
     border-bottom: 1px solid var(--line-soft);
+    gap: 16px;
+    flex-wrap: wrap;
   }
   .brand {
     display: flex;
@@ -288,12 +281,34 @@ npm run tauri:dev
   }
   .top-nav {
     display: flex;
-    gap: 18px;
+    gap: 16px;
     font-size: 12px;
     color: var(--dim);
     text-transform: uppercase;
     letter-spacing: 0.14em;
+    align-items: center;
   }
+  .lang {
+    display: flex;
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .lang-btn {
+    padding: 4px 10px;
+    background: transparent;
+    border: 0;
+    color: var(--dim);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    font-family: inherit;
+    cursor: pointer;
+  }
+  .lang-btn.on {
+    background: var(--amber);
+    color: var(--bg);
+  }
+  .lang-btn:not(.on):hover { color: var(--text-hi); }
+  .lang-btn + .lang-btn { border-left: 1px solid var(--line); }
 
   /* ---------- hero ---------- */
   .hero {
@@ -325,7 +340,7 @@ npm run tauri:dev
     max-width: 520px;
     line-height: 1.6;
   }
-  .hero-sub em {
+  .hero-sub :global(em) {
     color: var(--amber);
     font-style: normal;
     font-weight: 500;
@@ -336,6 +351,7 @@ npm run tauri:dev
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
+    align-items: center;
   }
   .btn {
     padding: 10px 18px;
@@ -356,6 +372,22 @@ npm run tauri:dev
   .btn.ghost { color: var(--text); }
   .btn.ghost:hover { color: var(--amber); border-color: var(--amber-soft); }
 
+  .plat-icons {
+    display: inline-flex;
+    border: 1px solid var(--line);
+    height: 38px;
+  }
+  .plat-ico {
+    width: 40px;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    color: var(--dim);
+    transition: all 0.12s ease;
+  }
+  .plat-ico:hover { color: var(--amber); background: var(--surface-2); }
+  .plat-ico + .plat-ico { border-left: 1px solid var(--line); }
+
   .hero-meta {
     margin-top: 20px;
     font-size: 11px;
@@ -367,7 +399,7 @@ npm run tauri:dev
   }
   .dot-sep { color: var(--line); }
 
-  /* ---------- hero card (ascii-ish mockup) ---------- */
+  /* ---------- hero card ---------- */
   .hero-card {
     border: 1px solid var(--line);
     background: var(--surface);
@@ -430,9 +462,7 @@ npm run tauri:dev
     font-size: 11px;
     padding: 4px 2px;
   }
-  .mock-meta > div {
-    display: contents;
-  }
+  .mock-meta > div { display: contents; }
   .mock-meta span:first-child {
     color: var(--dim);
     text-transform: uppercase;
@@ -558,7 +588,7 @@ npm run tauri:dev
     max-width: 720px;
     margin-bottom: 22px;
   }
-  .install-note strong {
+  .install-note :global(strong) {
     color: var(--amber);
     font-weight: 500;
   }
@@ -592,7 +622,11 @@ npm run tauri:dev
     font-size: 14px;
     font-weight: 500;
     font-family: var(--sans);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
+  .plat-svg { color: var(--amber); }
   .plat-ext {
     color: var(--dim);
     font-size: 11px;
@@ -659,12 +693,6 @@ npm run tauri:dev
     padding-left: 20px;
     border-left: 2px solid var(--amber);
   }
-  blockquote code {
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--amber);
-    font-style: normal;
-  }
   .anti-list {
     list-style: none;
     font-size: 12.5px;
@@ -678,11 +706,6 @@ npm run tauri:dev
   }
   .anti-list li:last-child { border-bottom: none; }
   .anti-list li span { color: var(--olive); }
-  .anti-list code {
-    color: var(--amber);
-    font-family: var(--mono);
-    font-size: 11.5px;
-  }
 
   /* ---------- footer ---------- */
   .foot {
