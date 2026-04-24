@@ -1,0 +1,9 @@
+name = "lavescar-ytdl"
+compatibility_date = "2025-09-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = ".svelte-kit/cloudflare"
+
+# Custom domain: configure yt.lavescar.com.tr → this project in the Cloudflare
+# Pages dashboard under Custom domains. The TOML doesn't bind it; Cloudflare
+# will issue the CF-managed certificate automatically once DNS points at the
+# Pages project (CNAME from yt.lavescar.com.tr to <project>.pages.dev).
