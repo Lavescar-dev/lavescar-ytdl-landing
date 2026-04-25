@@ -161,7 +161,8 @@
       {#each t.install.platforms as p, i}
         {@const ids = ['install-linux', 'install-windows', 'install-macos']}
         {@const iconKey = ['linux', 'windows', 'macos'][i] as 'linux'|'windows'|'macos'}
-        <a class="plat" id={ids[i]} href={RELEASES} target="_blank" rel="noopener">
+        {@const href = i === 2 ? `${REPO}#building-from-source` : RELEASES}
+        <a class="plat" id={ids[i]} href={href} target="_blank" rel="noopener">
           <div class="plat-head">
             <span class="plat-label">
               <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" class="plat-svg">{@html PLATFORM_ICONS[iconKey]}</svg>
