@@ -109,9 +109,9 @@ export const en: Dict = {
       tail: ' — no paid Apple / Windows certificates. Each bundle’s SHA-256 is published on the release page so you can verify before running. Auto-update is signed separately with a local minisign keypair.'
     },
     platforms: [
-      { label: 'Linux',   ext: 'AppImage / .deb', note: 'chmod +x, then run',                                                  cta: 'download ↗' },
-      { label: 'Windows', ext: '.msi / .exe',     note: 'SmartScreen → More info → Run anyway',                       cta: 'download ↗' },
-      { label: 'macOS',   ext: '.dmg',            note: 'xattr -rd com.apple.quarantine /Applications/lavescar-ytdl.app',     cta: 'download ↗' }
+      { label: 'Linux',   ext: '.deb (x86_64)',                  note: 'sudo dpkg -i lavescar-ytdl_*.deb',                                                                cta: 'download ↗' },
+      { label: 'Windows', ext: 'portable .zip (x86_64)',         note: 'Extract; keep lavescar-ytdl.exe and yt-dlp.exe together; SmartScreen → More info → Run anyway.',  cta: 'download ↗' },
+      { label: 'macOS',   ext: 'build from source',              note: 'No prebuilt bundle yet — clone the repo and run `npm run tauri:build` on a Mac.',                cta: 'instructions ↗' }
     ],
     verifyTitle: 'verify the SHA-256',
     sourceTitle: 'build from source'
@@ -184,9 +184,9 @@ export const tr: Dict = {
       tail: ' çıkıyor — ücretli Apple / Windows sertifikası yok. Her bundle’ın SHA-256’sı release sayfasında yayınlanır, çalıştırmadan önce doğrulayabilirsin. Otomatik güncelleme ayrıca yerel bir minisign anahtar çiftiyle imzalanır.'
     },
     platforms: [
-      { label: 'Linux',   ext: 'AppImage / .deb', note: 'chmod +x, sonra çalıştır',                                cta: 'indir ↗' },
-      { label: 'Windows', ext: '.msi / .exe',     note: 'SmartScreen → Daha fazla bilgi → Yine de çalıştır', cta: 'indir ↗' },
-      { label: 'macOS',   ext: '.dmg',            note: 'xattr -rd com.apple.quarantine /Applications/lavescar-ytdl.app',          cta: 'indir ↗' }
+      { label: 'Linux',   ext: '.deb (x86_64)',                  note: 'sudo dpkg -i lavescar-ytdl_*.deb',                                                                                                cta: 'indir ↗' },
+      { label: 'Windows', ext: 'portable .zip (x86_64)',         note: 'Çıkart; lavescar-ytdl.exe ile yt-dlp.exe aynı klasörde kalsın. SmartScreen → Daha fazla bilgi → Yine de çalıştır.',                cta: 'indir ↗' },
+      { label: 'macOS',   ext: 'kaynaktan derle',                note: 'Henüz hazır bundle yok — Mac’te repoyu klonla, `npm run tauri:build` çalıştır.',                                              cta: 'talimatlar ↗' }
     ],
     verifyTitle: 'SHA-256’yı doğrula',
     sourceTitle: 'kaynaktan derle'
