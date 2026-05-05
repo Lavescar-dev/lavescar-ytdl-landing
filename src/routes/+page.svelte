@@ -319,6 +319,10 @@ npm run tauri:dev
     align-items: start;
     padding-top: 24px;
   }
+  .hero-main, .hero-card {
+    min-width: 0;
+    max-width: 100%;
+  }
   @media (max-width: 960px) {
     .hero { grid-template-columns: 1fr; gap: 32px; }
   }
